@@ -230,7 +230,10 @@ function uniqueImportedSkillKey(companyId: string, baseSlug: string, usedKeys: S
 }
 
 function buildSkillRuntimeName(key: string, slug: string) {
-  if (key.startsWith("paperclipai/paperclip/")) return slug;
+  // Bundled Paperclip skills and local-path skills always use the clean slug name
+  // so that Pi can match the directory name to the `name:` field in SKILL.md.
+  // URL-sourced and catalog skills keep the hash suffix for collision safety.
+  if (key.startsWith("paperclipai/paperclip/") || key.startsWith("local/")) return slug;
   return `${slug}--${hashSkillValue(key)}`;
 }
 
